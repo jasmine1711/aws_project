@@ -3,11 +3,10 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto11  # Specifies the Java 11 runtime
+      java: corretto11  # For Maven
+      nodejs: 18       # For Serverless Framework
     commands:
-      - echo "Installing Node.js for Serverless..."
-      - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-      - apt-get install -y nodejs
+      - echo "Installing Serverless..."
       - npm install -g serverless@^3 # Install Serverless v3
 
   build:
@@ -18,7 +17,4 @@ phases:
   post_build:
     commands:
       - echo "Deploying with Serverless..."
-      # Note: This assumes your AWS role has deploy permissions
       - serverless deploy
-
-# Note: We don't need 'artifacts' because Serverless deploys the code itself.

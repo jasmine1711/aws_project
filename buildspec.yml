@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18  # Specify your runtime
+  build:
+    commands:
+      # Install dependencies
+      - echo "Installing dependencies..."
+      - npm install
+      # Create a ZIP file with the code and node_modules
+      - echo "Creating ZIP file..."
+      - zip -r function.zip .
+  post_build:
+    commands:
+      # Deploy the ZIP file to your Lambda function
+      - echo "Deploying to Lambda..."
+      - aws lambda update-function-code --function-name my-github-function --zip-file fileb://function.zip

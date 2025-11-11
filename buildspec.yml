@@ -3,17 +3,22 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 18  # Specify your runtime
+      java: corretto11  # Specifies the Java 11 runtime
+    commands:
+      - echo "Installing Node.js for Serverless..."
+      - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+      - apt-get install -y nodejs
+      - npm install -g serverless@^3 # Install Serverless v3
+
   build:
     commands:
-      # Install dependencies
-      - echo "Installing dependencies..."
-      - npm install
-      # Create a ZIP file with the code and node_modules
-      - echo "Creating ZIP file..."
-      - zip -r function.zip .
+      - echo "Building Java project with Maven..."
+      - mvn package  # This builds your .jar file
+
   post_build:
     commands:
-      # Deploy the ZIP file to your Lambda function
-      - echo "Deploying to Lambda..."
-      - aws lambda update-function-code --function-name my-github-function --zip-file fileb://function.zip
+      - echo "Deploying with Serverless..."
+      # Note: This assumes your AWS role has deploy permissions
+      - serverless deploy
+
+# Note: We don't need 'artifacts' because Serverless deploys the code itself.

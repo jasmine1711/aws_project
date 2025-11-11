@@ -1,0 +1,16 @@
+service: my-java-lambda
+
+provider:
+  name: aws
+  runtime: java11
+
+package:
+  artifact: target/my-java-lambda-dev.jar
+
+functions:
+  hello:
+    handler: com.example.Handler
+    events:
+      - httpApi:
+          path: /hello
+          method: get
